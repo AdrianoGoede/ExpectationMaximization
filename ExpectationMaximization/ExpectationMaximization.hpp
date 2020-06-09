@@ -56,7 +56,7 @@ private:
             if (media > 0)
                 this->Clusters[i].Media = (media / this->Clusters[i].Amostras.size());
             else
-                this->Clusters[i].Media = 10;
+                this->Clusters[i].Media = 25;
             // Recalcular Desvio:
             double desvio{0};
             for (std::vector<const Amostra*>::const_iterator it{this->Clusters[i].Amostras.cbegin()}; it < this->Clusters[i].Amostras.cend(); it++)
@@ -89,7 +89,7 @@ private:
         }
         return ret;
     }
-    void NomearClusters()
+    void RotularClusters()
     {
         for (unsigned short i{0}; i < NumClasses; i++)
         {
@@ -146,9 +146,10 @@ public:
             this->Amostras.push_back(a);
         }
         // Inicialização dos Gaussianos:
+        std::srand((unsigned)time(0));
         for (unsigned short i{0}; i < NumClasses; i++)
         {
-            this->Clusters[i].Media = this->Amostras[i].IMC;
+            this->Clusters[i].Media = this->Amostras[std::rand() % this->Amostras.size()].IMC;
             this->Clusters[i].Desvio = (this->Amostras.size() / NumClasses);
         }
     }
@@ -157,7 +158,7 @@ public:
         this->DistribuirAmostras();
         while (this->ReposicionarAmostras())
             this->RecalcularGaussianos();
-        this->NomearClusters();
+        this->RotularClusters();
     }
     std::string Classificar(const double peso, const double altura)
     {
